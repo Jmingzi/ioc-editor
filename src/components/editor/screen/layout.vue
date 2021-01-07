@@ -300,9 +300,6 @@ export default {
     visible () {
       return this.iocFrame.layoutLayers.length > 1
     }
-    // sequenceLayers () {
-    //   return this.iocFrame.layers.sort((a, b) => a.zIndex - b.zIndex)
-    // }
   },
   methods: {
     handleWindowKeydown (event) {
