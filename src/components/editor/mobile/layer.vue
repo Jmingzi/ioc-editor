@@ -58,7 +58,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   border-radius: 2px;
-  border: 1px solid currentColor;
+  border: 1px solid #E9ECF0;
   position: relative;
   min-height: 80px;
 

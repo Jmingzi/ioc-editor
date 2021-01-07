@@ -16,6 +16,22 @@
       :style="{ cursor: `${point.split('').reverse().map(m => direction[m]).join('')}-resize`}"
     >
     </div>
+    <div class="shape__header">
+      <Tooltip
+        :key="option.value"
+        :title="option.label"
+        v-for="option in levelOptions"
+      >
+        <div class="item" @click="handleLevel(option.value)">
+          <i :class="`iconfont icon-level-${option.value}`"/>
+        </div>
+      </Tooltip>
+      <Tooltip title="删除">
+        <div class="item" @click="handleDelete">
+          <i class="iconfont icon-layer-delete"/>
+        </div>
+      </Tooltip>
+    </div>
     <div class="shape__content">
       <slot></slot>
     </div>
@@ -24,10 +40,14 @@
 
 <script>
 import Vue from 'vue'
+import { Tooltip } from 'ant-design-vue'
 import IocContextMenu from '../../context-menu'
 Vue.use(IocContextMenu)
 export default {
   name: 'ioc-shape',
+  components: {
+    Tooltip
+  },
   props: {
     layer: {
       type: Object,
@@ -44,14 +64,19 @@ export default {
         l: 'w',
         r: 'e',
       },
+      levelOptions: [
+        { label: '置底', value: 'bottom' },
+        { label: '置顶', value: 'top' },
+        { label: '上移一层', value: 'up' },
+        { label: '下移一层', value: 'down' }
+      ]
     }
   },
   computed: {
     isActive () {
-      if (this.iocFrame.active) {
-        return this.iocFrame.active.id === this.layer.id
-      }
-      return false
+      const { id } = this.layer
+      const { active } = this.iocFrame
+      return !!active && active.id === id
     },
     style () {
       const { id, zIndex, position: { x, y }, size: { width, height }, fullscreen = false } = this.layer
@@ -140,15 +165,15 @@ export default {
     handleContextMenu (event) {
       event.preventDefault()
       event.stopPropagation()
-      this.$contextMenu && this.$contextMenu(this.menuOptions).register(this.handleOption).show(event)
+      // this.$contextMenu && this.$contextMenu(this.menuOptions).register(this.handleLevel).show(event)
     },
-    handleOption (key) {
+    handleLevel (level) {
       const { id } = this.layer
       const levels = this.iocFrame.layers.map(({ id, zIndex }) => ({ id, zIndex })).sort((a, b) => a.zIndex - b.zIndex)
       const sourceIndex = levels.findIndex(item => id === item.id)
       const source = levels[sourceIndex]
       let needUpdate = false
-      switch (key) {
+      switch (level) {
         case 'top': {
           if (sourceIndex < levels.length - 1) {
             needUpdate = true
@@ -201,6 +226,9 @@ export default {
         this.iocFrame.setPrev()
         this.iocFrame.setLayersLevel(newLevel)
       }
+    },
+    handleDelete () {
+      this.iocFrame.removeLayer(this.layer)
     },
     handleMouseDown (event) {
       event.stopPropagation()
@@ -323,6 +351,34 @@ export default {
   height: 100%;
   border: 1px solid currentColor;
 
+  &__header {
+    position: absolute;
+    top: -32px;
+    right: 0;
+    width: auto;
+    height: 32px;
+    line-height: 32px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    display: none;
+    //display: flex;
+
+    .item {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      .icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
   &__point {
     position: absolute;
     background: currentColor;
@@ -370,6 +426,9 @@ export default {
   &.active {
     z-index: 999 !important;
     border: 1px solid #2266FF;
+    .shape__header {
+      display: flex;
+    }
   }
 
   &.active {

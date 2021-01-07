@@ -81,6 +81,9 @@ export default {
     },
     frame (newFrame) {
       this.layers = newFrame.layers
+      if (this.active) {
+        this.active =  newFrame.layers.find(item => item.id === this.active.id)
+      }
     }
   },
   computed: {
@@ -165,7 +168,6 @@ export default {
       const index = this.layers.findIndex(item => (item.id === id && item.pid === pid))
       if (index > -1) {
         if (this.active && this.active.id === id) {
-          console.log('清空数据')
           this.active = undefined
         }
         const backupLayers = this.layers.slice()

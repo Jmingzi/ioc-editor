@@ -41,10 +41,6 @@ export default {
 
 <style scoped lang="less">
 .layer {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
   min-height: 80px;
 }
 </style>

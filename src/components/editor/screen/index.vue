@@ -73,12 +73,12 @@ export default {
     handleContextMenu (event) {
       event.preventDefault()
       event.stopPropagation()
-      this.$contextMenu && this.$contextMenu([
-        {
-          value: 'clear',
-          label: '清空数据'
-        }
-      ]).register(this.handleOption).show(event)
+      // this.$contextMenu && this.$contextMenu([
+      //   {
+      //     value: 'clear',
+      //     label: '清空数据'
+      //   }
+      // ]).register(this.handleOption).show(event)
     },
     handleOption (key) {
       if (key === 'clear') {
