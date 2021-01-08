@@ -10,17 +10,17 @@ todo
 ```
 - canvas
   - mode-flow
-    - container-drag.vue
+    - container-drop.vue
     - container-render.vue
     - index.vue
   - mode-position
-    - container-drag.vue
+    - container-drop.vue
     - container-render.vue
     - index.vue
     - container-multi-select.vue
     - container-operator.vue
   - index.vue
-  - container-drag.vue
+  - container-drop.vue
   - container-render.vue
 ```
 
@@ -31,18 +31,15 @@ todo
 ```vue
 <template>
   <canvas>
-    <container-drag 
+    <container-drop
       v-for="item in data"
       :layer="item"
     >
-      <container-render>
-        
-      </container-render>
-    </container-drag>
+    </container-drop>
   </canvas>
 </template>
 
 <script>
-import { Canvas, ContainerDrag, ContainerRender } from 'ioc-editor'
+import { Canvas, ContainerDrop } from 'ioc-editor'
 </script>
 ```
